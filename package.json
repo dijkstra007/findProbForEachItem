@@ -1,0 +1,26 @@
+{
+  "name": "findprobforeachitem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dijkstra007/findProbForEachItem.git"
+  },
+  "author": "Chinnawat Ong-art",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dijkstra007/findProbForEachItem/issues"
+  },
+  "homepage": "https://github.com/dijkstra007/findProbForEachItem#readme",
+  "devDependencies": {
+    "chance": "^1.0.8",
+    "should": "^11.2.1"
+  },
+  "dependencies": {
+    "normalize-array-number": "^1.0.0"
+  }
+}
