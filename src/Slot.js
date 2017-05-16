@@ -20,6 +20,12 @@ class Slot{
             temp.push(multiplierTable[i]*money)
         return temp
     }
+    getFaceList(){
+        let temp = []
+        for(let i=1;i<=this.NUMBER_OF_FACE;i++)
+            temp.push(i)
+        return temp
+    }
 }
 
 module.exports = Slot
