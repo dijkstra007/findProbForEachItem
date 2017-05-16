@@ -8,4 +8,5 @@ describe("Slot class",function(){
             let slot = new Slot()
             slot.getRewardTableFromMultiplierTable(multiplierTable,money).should.eql(target)
         })
+        
 })
