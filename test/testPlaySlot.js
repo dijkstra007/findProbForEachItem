@@ -114,4 +114,161 @@ describe("PlaySlot class",function(){
             
             playSlot.isWin(table,[[0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14]],rewardTable).should.eql(target)
         })
+        it('test isThisLineAllWild true',function(){
+            let multiplierTable = [0,5,5,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:3,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [2,2,2,1,2,3,1,2,3]
+
+            playSlot.isThisLineAllWild(table,[0,1,2],2).should.eql(true)
+
+        })
+        it('test isThisLineAllWild false',function(){
+            let multiplierTable = [0,5,5,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:3,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [2,2,2,1,2,3,1,2,3]
+
+            playSlot.isThisLineAllWild(table,[0,1,2],2).should.eql(true)
+
+        })
+        it('test getFirstItemThatIsNotWildItem',function(){
+            let multiplierTable = [0,5,5,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:3,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [2,2,3,1,2,3,1,2,3]
+            let target = 3
+            playSlot.getFirstItemThatIsNotWildItem(table,[0,1,2],2).should.eql(target)
+
+        })
+        it('test isWin(wild) case#1',function(){//1*3
+            let multiplierTable = [0,5,5,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:3,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [1,1,1,1,2,3,1,2,3]
+            let target = [50,[1]]
+
+            playSlot.isWin(table,[[0,1,2]],rewardTable).should.eql(target)
+        })
+        it('test isWin(wild) case#2',function(){//all wild
+            let multiplierTable = [0,5,50,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:3,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [2,2,2,1,2,3,1,2,3]
+            let target = [500,[1]]
+
+            playSlot.isWin(table,[[0,1,2]],rewardTable).should.eql(target)
+        })
+        it('test isWin(wild) case#3',function(){//1*3 2*3
+            let multiplierTable = [0,5,50,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3],[4,2,6]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:3,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [1,2,1,2,2,2,1,2,3]
+            let target = [550,[1,2]]
+
+            playSlot.isWin(table,[[0,1,2],[3,1,5]],rewardTable).should.eql(target)
+        })
+        it('test isWin(wild) case#4',function(){//1*5 ,3*5
+            let multiplierTable = [0,5,50,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3,4,5],[6,2,8,4,10]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:5,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [1,2,1,2,1,2,2,2,3,3,1,2,3,1,2]
+            let target = [3000,[1,2]]
+
+            playSlot.isWin(table,[[0,1,2,3,4],[5,1,7,3,9]],rewardTable).should.eql(target)
+        })
+        it('test isWin(wild) case#5',function(){//1*5 ,2*3
+            let multiplierTable = [0,5,10,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3,4,5],[6,2,8,4,10]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:5,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [1,2,1,1,1,2,2,2,2,2,1,2,3,1,2]
+            let target = [1100,[1,2]]
+
+            playSlot.isWin(table,[[0,1,2,3,4],[5,1,7,3,9]],rewardTable).should.eql(target)
+        })
+        it('test isWin(wild) case#6',function(){//1*5 ,1*5
+            let multiplierTable = [0,5,10,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3,4,5],[6,2,8,4,10]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:5,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [1,1,1,1,2,1,3,2,2,2,1,2,3,1,2]
+            let target = [2000,[1,2]]
+
+            playSlot.isWin(table,[[0,1,2,3,4],[5,1,7,3,9]],rewardTable).should.eql(target)
+        })
+        it('test isWin(wild) case#7',function(){//1*5 
+            let multiplierTable = [0,5,10,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3,4,5],[6,2,8,4,10]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:5,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [2,2,1,1,2,1,3,2,2,2,1,2,3,1,2]
+            let target = [1000,[2]]
+
+            playSlot.isWin(table,[[0,1,2,3,4],[5,1,7,3,9]],rewardTable).should.eql(target)
+        })
+        it('test isWin(wild) case#8',function(){//none
+            let multiplierTable = [0,5,10,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3,4,5],[6,7,8,9,10]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:5,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [2,2,1,1,2,1,3,2,2,2,1,2,3,1,2]
+            let target = [0,[]]
+
+            playSlot.isWin(table,[[0,1,2,3,4],[5,6,7,8,9]],rewardTable).should.eql(target)
+        })
+        it('test isWin(wild) case#8',function(){//none
+            let multiplierTable = [0,5,10,10]
+            let fourFaceMultiplier = [0,4,4,5]
+            let fiveFaceMultiplier = [0,20,20,15]
+            let winLines = [[1,2,3,4,5],[6,7,8,9,10]]
+            let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:5,NUMBER_OF_FACE:3,MIN_BET_PER_LINE:10,WIN_LINE:winLines,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:2})
+            let rewardTable = slot.getRewardTableFromMultiplierTable(multiplierTable,slot.MIN_BET_PER_LINE)
+            let playSlot = new PlaySlot(slot)
+            let table = [1,2,1,1,3,3,3,2,2,2,1,2,3,1,2]
+            let target = [1700,[1,2]]
+
+            playSlot.isWin(table,[[0,1,2,3,4],[5,6,7,8,9]],rewardTable).should.eql(target)
+        })
 })
+

@@ -12,6 +12,9 @@ class Slot{
             this.FIVE_FACE_MULTIPLIER = props.FIVE_FACE_MULTIPLIER
             if(props.WIN_LINE)
                 this.NUMBER_OF_WINLINE = props.WIN_LINE.length
+            if(props.WILD_NUMBER){
+                this.WILD_NUMBER=props.WILD_NUMBER
+            }
         }
     }
     getRewardTableFromMultiplierTable(multiplierTable,money){
@@ -25,6 +28,11 @@ class Slot{
         for(let i=1;i<=this.NUMBER_OF_FACE;i++)
             temp.push(i)
         return temp
+    }
+    haveWildFace(){
+        if(this.WILD_NUMBER)
+            return true
+        return false
     }
 }
 

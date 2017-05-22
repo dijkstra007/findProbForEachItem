@@ -131,8 +131,8 @@ let playSlot = new PlaySlot(slot)
 let probList = normalize([100,105,110,123,129,120,130,160,395,160,140,130,100,50,200,100])
 
 let faceList = slot.getFaceList()
-const NUMBER_OF_TURN = 10000
-const OUT_SIDE_LOOP_LIMIT = 100
+const NUMBER_OF_TURN = 1000
+const OUT_SIDE_LOOP_LIMIT = 10
 let totalMoneyPay = slot.MIN_BET_PER_LINE*NUMBER_OF_TURN*slot.NUMBER_OF_WINLINE
 let sumReturnRate = 0
 let sumPercenToWin = 0
