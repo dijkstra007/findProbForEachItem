@@ -125,15 +125,14 @@ let winLine = [
 let multiplierTable = [0,5,5,10,10,20,20,25,30,35,50,50,100,100,200,500,1000]
 let fourFaceMultiplier = [0,4,4,5,5,4,4,4,4,4,3,3,2,2,2,2,2]
 let fiveFaceMultiplier = [0,20,20,15,15,10,10,10,10,10,6,6,5,5,5,4,5]
-let slot = new Slot({NUMBER_OF_ROW:4,NUMBER_OF_COL:5,NUMBER_OF_FACE:16,MIN_BET_PER_LINE:10,WIN_LINE:winLine,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier})
+let slot = new Slot({NUMBER_OF_ROW:4,NUMBER_OF_COL:5,NUMBER_OF_FACE:16,MIN_BET_PER_LINE:10,WIN_LINE:winLine,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,FEVER_NUMBER:1,FREE_SPIN_ADDER:10})
 let playSlot = new PlaySlot(slot)
 // let probList = normalize([15,10,20,25,60,100,160,150,200,200,100,60,40,20,20,15])
-let probList = normalize([100,105,110,123,129,120,130,160,395,160,140,130,100,50,200,100])
+let probList = normalize([1,3,3.3,2.2,3,3,4,5,7,9,10.5,11.3,3,4,3,2])
 
 let faceList = slot.getFaceList()
-const NUMBER_OF_TURN = 1000
+const NUMBER_OF_TURN = 10000
 const OUT_SIDE_LOOP_LIMIT = 10
-let totalMoneyPay = slot.MIN_BET_PER_LINE*NUMBER_OF_TURN*slot.NUMBER_OF_WINLINE
 let sumReturnRate = 0
 let sumPercenToWin = 0
 
@@ -141,6 +140,9 @@ let sumPercenToWin = 0
 for(let i=1;i<=OUT_SIDE_LOOP_LIMIT;i++){
     let cntWin = 0
     let sumReward = 0
+    let playSlot = new PlaySlot(slot)
+    let totalMoneyPay = slot.MIN_BET_PER_LINE*NUMBER_OF_TURN*slot.NUMBER_OF_WINLINE
+
     for(let playTime = 1; playTime<=NUMBER_OF_TURN;playTime++){
         let reward = playSlot.play(faceList,probList)
         sumReward +=reward
@@ -148,6 +150,7 @@ for(let i=1;i<=OUT_SIDE_LOOP_LIMIT;i++){
             cntWin++
         }
     }
+    totalMoneyPay -= playSlot.freeSpin*slot.MIN_BET_PER_LINE*slot.NUMBER_OF_WINLINE
     let percentToWin = cntWin/NUMBER_OF_TURN*100
     let returnRate = sumReward/totalMoneyPay*100
     // console.log("Percent to win: "+percentToWin)

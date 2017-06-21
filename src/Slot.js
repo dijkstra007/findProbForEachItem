@@ -13,7 +13,11 @@ class Slot{
             if(props.WIN_LINE)
                 this.NUMBER_OF_WINLINE = props.WIN_LINE.length
             if(props.WILD_NUMBER){
-                this.WILD_NUMBER=props.WILD_NUMBER
+                this.WILD_NUMBER = props.WILD_NUMBER
+            }
+            if(props.FEVER_NUMBER){
+                this.FEVER_NUMBER = props.FEVER_NUMBER
+                this.FREE_SPIN_ADDER = props.FREE_SPIN_ADDER
             }
         }
     }
@@ -30,9 +34,10 @@ class Slot{
         return temp
     }
     haveWildFace(){
-        if(this.WILD_NUMBER)
-            return true
-        return false
+        return this.WILD_NUMBER?true:false
+    }
+    haveFeverFace(){
+        return this.FEVER_NUMBER?true:false
     }
 }
 

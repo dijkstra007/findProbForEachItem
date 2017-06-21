@@ -7,6 +7,7 @@ class PlaySlot{
             this.cntWin = 0
             this.hit = Array(this.slot.NUMBER_OF_WINLINE+1).fill(0)
             this.freeSpin = 0
+            this.mapHitLineToItem = {}
         }
     }
     initTable(row,col){
@@ -22,6 +23,7 @@ class PlaySlot{
         
         }
         let [reward,lineWinList] = this.isWin(table,winLines,rewardTable)
+        
         if(reward!=0){
             let numberOfHit = lineWinList.length
             sumReward+=reward
@@ -46,85 +48,76 @@ class PlaySlot{
         }
         return newArr
     }
-    isWin(table,winLinesInArrayFrom,rewardTable){
-        let winLines = winLinesInArrayFrom
-        let cnt_win = 0
+    isTableHitWinLine(table,eachLine){
+        let firstItem = table[eachLine[0]]
+        let cntHit = 0
         let isHit = true
+        for(let i=0;i<eachLine.length;i++){
+                        let tableIndex = eachLine[i]
+                        let item = table[tableIndex]
+                        if(this.slot.haveWildFace()==false){
+                            if(cntHit<3 && item!=firstItem)
+                                isHit = false
+                            else if(cntHit>=3 && item!=firstItem)
+                                break;
+                            else if(item==firstItem)
+                                cntHit++
+                        }else{
+                            if(isHit && (item == firstItem || item == this.slot.WILD_NUMBER) ){
+                                cntHit++
+                            }
+                            else if(cntHit >= 3 && !(item == firstItem || item==this.slot.WILD_NUMBER)  ){
+                                break;
+                            }
+                            else if(cntHit < 3 && !(item == firstItem || item==this.slot.WILD_NUMBER)  ){
+                                isHit = false
+                                break;
+                            }
+                        }
+        }
+        if(isHit){
+                if(this.isItemHitThePreviousWinLine(firstItem,eachLine,cntHit,this.mapHitLineToItem)){
+                    return [false,0];
+                }
+        }
+        return [isHit,cntHit];
+    }
+    calculateReward(firstItem,cntHit,rewardTable,fourFaceMultiplier,fiveFaceMultiplier){
+
+        if(cntHit==3)
+            return  rewardTable[firstItem];
+        else if(cntHit==4)
+            return  rewardTable[firstItem]*fourFaceMultiplier[firstItem];
+        else if(cntHit==5)
+            return rewardTable[firstItem]*fiveFaceMultiplier[firstItem];
+                    
+    }
+    isWin(table,winLinesBaseOnArrayIndex,rewardTable){
+        let winLines = winLinesBaseOnArrayIndex
+        let cnt_win = 0
         let reward = 0
         let lineNumber = 1
         let lineWinList = []
-        let fourFaceMultiplier = this.slot.FOUR_FACE_MULTIPLIER
-        let fiveFaceMultiplier = this.slot.FIVE_FACE_MULTIPLIER
-        if(this.slot.haveWildFace()==false){
-            for(let indexOfWinLines = 0 ; indexOfWinLines<winLines.length; indexOfWinLines++){
-                    let eachLine = winLines[indexOfWinLines]
-                    let firstItem = table[eachLine[0]]
-                    let cntHit = 0
-                    isHit = true
-                    for(let i=0;i<eachLine.length;i++){
-                        let tableIndex = eachLine[i]
-                        if(cntHit<3 && table[tableIndex]!=firstItem)
-                            isHit = false
-                        else if(cntHit>=3 && table[tableIndex]!=firstItem)
-                            break;
-                        else if(table[tableIndex]==firstItem)
-                            cntHit++
+        for(let indexOfWinLines = 0 ; indexOfWinLines<winLines.length; indexOfWinLines++){
+                let eachLine = winLines[indexOfWinLines];
+                let firstItem = table[eachLine[0]];
+                let cntHit = 0;
+                let isHit = true;
+                [isHit,cntHit] = this.isTableHitWinLine(table,eachLine)
+                if(isHit){
+                    
+                    reward += this.calculateReward(firstItem,cntHit,rewardTable,this.slot.FOUR_FACE_MULTIPLIER,this.slot.FIVE_FACE_MULTIPLIER)
+                    if(this.slot.haveFeverFace() && this.isGetFreeSpin(firstItem,this.slot.FEVER_NUMBER)){
+                        this.freeSpin+=this.slot.FREE_SPIN_ADDER
                     }
-                    if(isHit){
-                        if(cntHit==3)
-                            reward += rewardTable[firstItem]
-                        else if(cntHit==4)
-                            reward += rewardTable[firstItem]*fourFaceMultiplier[firstItem]
-                        else if(cntHit==5)
-                            reward += rewardTable[firstItem]*fiveFaceMultiplier[firstItem]
-                            
-                        cnt_win++
-                        lineWinList.push(lineNumber)
-                        
-                    }
-                    lineNumber++
-            }
-        }else{
-            for(let indexOfWinLines = 0 ; indexOfWinLines<winLines.length; indexOfWinLines++){
-                    let eachLine = winLines[indexOfWinLines]
-                    let cntHit = 0
-                    isHit = true                   
-                    let firstItem = table[eachLine[0]]
-                    for(let i=0;i<eachLine.length;i++){
-                        let tableIndex = eachLine[i]
-                        let item = table[tableIndex]
-                        if(isHit && (item == firstItem || item == this.slot.WILD_NUMBER) ){
-                            cntHit++
-                        }
-                        else if(cntHit >= 3 && !(item == firstItem || item==this.slot.WILD_NUMBER)  ){
-                            break;
-                        }
-                        else if(cntHit < 3 && !(item == firstItem || item==this.slot.WILD_NUMBER)  ){
-                            isHit = false
-                            break;
-                        }
-                    }
-                    if(isHit){
-                        if(cntHit==3)
-                            reward += rewardTable[firstItem]
-                        else if(cntHit==4)
-                            reward += rewardTable[firstItem]*fourFaceMultiplier[firstItem]
-                        else if(cntHit==5)
-                            reward += rewardTable[firstItem]*fiveFaceMultiplier[firstItem]
-                        if(this.isGetFreeSpin(firstItem,this.slot.WILD_NUMBER)){
-                            console.log("-----------------------------------")
-                            this.printTable(table,this.slot.NUMBER_OF_COL)
-                            this.freeSpin += 5    
-                        }
 
-
-                        cnt_win++
-                        lineWinList.push(lineNumber)
-                        
-                    }
-                    lineNumber++
-            }
+                    cnt_win++;
+                    lineWinList.push(lineNumber);
+                    
+                }
+                lineNumber++
         }
+        
         if(cnt_win==0)
             return [0,[]]
         else
@@ -164,8 +157,21 @@ class PlaySlot{
         }
         return wildNum
     }
-    isGetFreeSpin(firstItem,wildNum){
-        return (firstItem==wildNum)
+    isGetFreeSpin(firstItem,feverNum){
+        return (firstItem==feverNum)
+    }
+    isItemHitThePreviousWinLine(faceNum,line,cntHit,mapHitLineToItem){
+        let key = []
+        for(let i=0 ; i<cntHit ; i++){
+            key.push(line[i])
+        }
+        if(mapHitLineToItem[key] == faceNum){
+            return true;
+        }
+        else{
+            this.mapHitLineToItem[key] = faceNum;
+            return false;
+        }
     }
 }
 

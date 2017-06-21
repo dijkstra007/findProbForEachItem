@@ -40,11 +40,11 @@ let winLine = [
       [ 7, 8, 6 ]
 ]
 let multiplierTable = [0,5,5,10,10,20,20,50,100,200,500,1000]
-let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:3,NUMBER_OF_FACE:11,MIN_BET_PER_LINE:10,WIN_LINE:winLine,MULTIPLIER_TABLE:multiplierTable})
+let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:3,NUMBER_OF_FACE:11,MIN_BET_PER_LINE:10,WIN_LINE:winLine,MULTIPLIER_TABLE:multiplierTable,FEVER_NUMBER:7,FREE_SPIN_ADDER:5})
 let playSlot = new PlaySlot(slot)
 let probList = normalize([50,50,100,120,170,200,250,160,100,50,70])
 let faceList = slot.getFaceList()
-const NUMBER_OF_TURN = 10000
+const NUMBER_OF_TURN = 100000
 const OUT_SIDE_LOOP_LIMIT = 10
 let totalMoneyPay = slot.MIN_BET_PER_LINE*NUMBER_OF_TURN*slot.NUMBER_OF_WINLINE
 let sumReturnRate = 0
@@ -71,5 +71,5 @@ for(let i=1;i<=OUT_SIDE_LOOP_LIMIT;i++){
 //     console.log(probList[i])
 console.log("AVG percent to win: "+sumPercenToWin/OUT_SIDE_LOOP_LIMIT)
 console.log("AVG returnRate: "+sumReturnRate/OUT_SIDE_LOOP_LIMIT)
-playSlot.printHitSummary()
+// playSlot.printHitSummary()
 console.log(probList)

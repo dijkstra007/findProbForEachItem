@@ -63,16 +63,14 @@ let winLine = [
       [1,2,3,9,15]
 ]
 let multiplierTable = [0,5,5,10,10,20,20,50,100,200,500,1000]
-let fourFaceMultiplier = [0,4,4,5,5,4,4,3,2,2,2,2]
-let fiveFaceMultiplier = [0,20,20,15,15,10,10,6,5,5,4,5]
+let fourFaceMultiplier = [0,2,2,2,2,2,2,2,2,2,2,2]
+let fiveFaceMultiplier = [0,3,3,3,3,3,3,3,3,3,3,3]
 let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:5,NUMBER_OF_FACE:11,MIN_BET_PER_LINE:10,WIN_LINE:winLine,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier})
 let playSlot = new PlaySlot(slot)
-// let probList = normalize([160,160,200,300,495,400,300,100,50,20,10])
-let probList = normalize([166,160,200,300,495,400,300,100,50,20,10])
+let probList = normalize([1,1.3,2.7,1.3,1.2,4,3,2,2.1,0.6,0.9])
 let faceList = slot.getFaceList()
 const NUMBER_OF_TURN = 10000
 const OUT_SIDE_LOOP_LIMIT = 10
-let totalMoneyPay = slot.MIN_BET_PER_LINE*NUMBER_OF_TURN*slot.NUMBER_OF_WINLINE
 let sumReturnRate = 0
 let sumPercenToWin = 0
 
@@ -80,17 +78,23 @@ let sumPercenToWin = 0
 for(let i=1;i<=OUT_SIDE_LOOP_LIMIT;i++){
     let cntWin = 0
     let sumReward = 0
+    let playSlot = new PlaySlot(slot)
+    let totalMoneyPay = slot.MIN_BET_PER_LINE*NUMBER_OF_TURN*slot.NUMBER_OF_WINLINE
+
     for(let playTime = 1; playTime<=NUMBER_OF_TURN;playTime++){
         let reward = playSlot.play(faceList,probList)
         sumReward +=reward
+        
         if(reward!=0){
             cntWin++
         }
     }
+    totalMoneyPay -= playSlot.freeSpin*slot.MIN_BET_PER_LINE*slot.NUMBER_OF_WINLINE
     let percentToWin = cntWin/NUMBER_OF_TURN*100
     let returnRate = sumReward/totalMoneyPay*100
     // console.log("Percent to win: "+percentToWin)
     // console.log("Return rate: "+returnRate)
+    
     sumPercenToWin+=percentToWin
     sumReturnRate+=returnRate
 }
@@ -100,4 +104,4 @@ for(let i=1;i<=OUT_SIDE_LOOP_LIMIT;i++){
 console.log("AVG percent to win: "+sumPercenToWin/OUT_SIDE_LOOP_LIMIT)
 console.log("AVG percent of returnRate: "+sumReturnRate/OUT_SIDE_LOOP_LIMIT)
 // playSlot.printHitSummary()
-// console.log(probList)
+console.log(probList)

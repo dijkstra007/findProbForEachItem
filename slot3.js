@@ -33,14 +33,13 @@ let winLine = [
     [1,2,8,4,5]
 ]
 let multiplierTable = [0,5,5,10,10,20,20,50,100,200,500,1000]
-let fourFaceMultiplier = [0,4,4,5,5,4,4,3,2,2,2,2]
-let fiveFaceMultiplier = [0,20,20,15,15,10,10,6,5,5,4,5]
-let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:5,NUMBER_OF_FACE:11,MIN_BET_PER_LINE:10,WIN_LINE:winLine,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:5})
-// let probList = normalize([3,2,1.9,1,1,4.1,1.6,1.8,1,1,0.2])
-let probList = normalize([4.3,4.7,3,1,0.7,4.1,1.6,1.8,1,1,0.2])
+let fourFaceMultiplier = [0,2,2,2,2,2,2,2,2,2,2,2]
+let fiveFaceMultiplier = [0,3,3,3,3,3,3,3,3,3,3,3]
+let slot = new Slot({NUMBER_OF_ROW:3,NUMBER_OF_COL:5,NUMBER_OF_FACE:11,MIN_BET_PER_LINE:100,WIN_LINE:winLine,MULTIPLIER_TABLE:multiplierTable,FOUR_FACE_MULTIPLIER:fourFaceMultiplier,FIVE_FACE_MULTIPLIER:fiveFaceMultiplier,WILD_NUMBER:11,FEVER_NUMBER:11,FREE_SPIN_ADDER:7})
+let probList = normalize([4.3,4.7,3,1,0.85,4.89,2.5,1.8,1.5,1.3,1])
 let faceList = slot.getFaceList()
 const NUMBER_OF_TURN = 10000
-const OUT_SIDE_LOOP_LIMIT = 1
+const OUT_SIDE_LOOP_LIMIT = 10
 let sumReturnRate = 0
 let sumPercenToWin = 0
 
